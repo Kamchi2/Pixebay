@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.example.pixabay.databinding.ItemImageBinding
+import com.example.pixebay.databinding.ItemImageBinding
 
 class ImageAdapter(val list: List<ImageModel>) :
     RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
