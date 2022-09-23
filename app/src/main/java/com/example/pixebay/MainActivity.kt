@@ -13,7 +13,8 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
-    var adapter = ImageAdapter(mutableListOf())
+    lateinit var adapter: ImageAdapter
+
     var perPage = 10
     var page = 1
 
@@ -30,31 +31,34 @@ class MainActivity : AppCompatActivity() {
                 page++
                 doRequest()
             }
-            searchBtn.setOnClickListener(doRequest())
+            searchBtn.setOnClickListener {
+                doRequest()
+            }
             addImagesBtn.setOnClickListener {
                 perPage += 5
+                doRequest()
             }
         }
     }
 
-    private fun ActivityMainBinding.doRequest(): (View) -> Unit =
-        {
-            App.api.getImages(wordEd.text.toString(), page = page, perPage = perPage)
-                .enqueue(object : Callback<PixabayModel> {
-                    override fun onResponse(
-                        call: Call<PixabayModel>,
-                        response: Response<PixabayModel>
-                    ) {
-                        if (response.isSuccessful) {
-                            adapter = ImageAdapter(response.body()?.hits!!)
-                            recyclerView.adapter = adapter
-                        }
+    private fun doRequest() {
+        App.api.getImages(binding.wordEd.text.toString(), page = page, perPage = perPage)
+            .enqueue(object :
+                Callback<PixabayModel> {
+                override fun onResponse(
+                    call: Call<PixabayModel>,
+                    response: Response<PixabayModel>
+                ) {
+                    if (response.isSuccessful) {
+                        adapter = ImageAdapter(response.body()!!.hits)
+                        binding.recyclerView.adapter = adapter
                     }
+                }
 
-                    override fun onFailure(call: Call<PixabayModel>, t: Throwable) {
-                        Log.e("ololo", "onFailure: ${t.message}")
-                    }
+                override fun onFailure(call: Call<PixabayModel>, t: Throwable) {
+                    Log.e("ololo", "onFailure: ${t.message}")
+                }
 
-                })
-        }
+            })
+    }
 }

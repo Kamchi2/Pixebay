@@ -9,11 +9,12 @@ import com.example.pixebay.databinding.ItemImageBinding
 class ImageAdapter(val list: List<ImageModel>) :
     RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
 
-    class ImageViewHolder(val binding: ItemImageBinding) :
+    class ImageViewHolder(private val binding: ItemImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun onBind(imageModel: ImageModel) {
-            binding.imageView.load(imageModel.largeImageURL)
+        fun onBind(model: ImageModel) {
+            binding.imageView.load(model.largeImageURL)
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
