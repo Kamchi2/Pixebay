@@ -2,7 +2,6 @@ package com.example.pixebay
 
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pixebay.databinding.ActivityMainBinding
 import retrofit2.Call
@@ -14,9 +13,11 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     lateinit var adapter: ImageAdapter
+    lateinit var model: MutableList<ImageModel>
+
+    var page = 1
 
     var perPage = 10
-    var page = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,10 +36,30 @@ class MainActivity : AppCompatActivity() {
                 doRequest()
             }
             addImagesBtn.setOnClickListener {
-                perPage += 5
-                doRequest()
+                addImages()
             }
         }
+    }
+    private fun addImages() {
+        App.api.getImages(binding.wordEd.text.toString(), page = page, perPage = perPage)
+            .enqueue(object :
+                Callback<PixabayModel> {
+                override fun onResponse(
+                    call: Call<PixabayModel>,
+                    response: Response<PixabayModel>
+                ) {
+                    if (response.isSuccessful) {
+                        response.body()?.hits?.forEach {
+                            adapter.addImage(it)
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<PixabayModel>, t: Throwable) {
+                    Log.e("ololo", "onFailure: ${t.message}")
+                }
+
+            })
     }
 
     private fun doRequest() {

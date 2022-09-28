@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.pixebay.databinding.ItemImageBinding
 
-class ImageAdapter(val list: List<ImageModel>) :
+class ImageAdapter(val list: ArrayList<ImageModel>) :
     RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
 
     class ImageViewHolder(private val binding: ItemImageBinding) :
@@ -15,6 +15,11 @@ class ImageAdapter(val list: List<ImageModel>) :
             binding.imageView.load(model.largeImageURL)
         }
 
+    }
+
+    fun addImage(imageModel: ImageModel) {
+        list.add(imageModel)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {

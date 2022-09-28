@@ -1,7 +1,7 @@
 package com.example.pixebay
 
 data class PixabayModel (
-    val hits: List<ImageModel>
+    val hits: ArrayList<ImageModel>
         )
 
 data class ImageModel (
